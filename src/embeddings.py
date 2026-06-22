@@ -10,7 +10,7 @@ def get_model():
     global _model
     if _model is None:
         from sentence_transformers import SentenceTransformer
-        _model = SentenceTransformer(EMBEDDING_MODEL)
+        _model = SentenceTransformer(EMBEDDING_MODEL, device="cpu")
     return _model
 
 
@@ -22,5 +22,5 @@ def embed_text(text):
 
 def embed_texts(texts):
     model = get_model()
-    vectors = model.encode(texts, normalize_embeddings=True)
+    vectors = model.encode(texts, normalize_embeddings=True, batch_size=16)
     return np.array(vectors, dtype="float32")
