@@ -4,12 +4,21 @@ from autogen_ext.models.openai import OpenAIChatCompletionClient
 
 from src.tools import search_knowledge_base, record_finding, recall_findings
 
+GROQ_BASE_URL = "https://api.groq.com/openai/v1"
+GROQ_MODEL = "llama-3.3-70b-versatile"
 
-def get_model_client(model="gpt-4o-mini", temperature=0.3):
+
+def get_model_client(temperature=0.3):
     return OpenAIChatCompletionClient(
-        model=model,
+        model=GROQ_MODEL,
+        base_url=GROQ_BASE_URL,
+        api_key=os.getenv("GROQ_API_KEY"),
         temperature=temperature,
-        api_key=os.getenv("OPENAI_API_KEY"),
+        model_capabilities={
+            "vision": False,
+            "function_calling": True,
+            "json_output": True,
+        },
     )
 
 
